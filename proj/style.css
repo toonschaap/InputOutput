@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Pacifico);
 
 body{
-  background: #F6F7BD;
+  background: black;
 }
 
 h1{
@@ -10,7 +10,7 @@ h1{
   line-height:1em;
   margin-bottom: 15px;
   font-family: sans-serif;
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+  text-shadow: 10px 10px 0 rgba(0,0,0,0.4);
   @media{
 
   }
@@ -29,5 +29,5 @@ div{
 
 #canvas{
     margin-left:2%;
-    background: linear-gradient(#80BCA3, #B6D8C0);
+    background: linear-gradient(#b3b3b3, #262626);
 }
