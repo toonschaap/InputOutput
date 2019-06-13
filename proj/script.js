@@ -3,6 +3,26 @@
     window.requestAnimationFrame = requestAnimationFrame;
 })();
 
+window.addEventListener("gamepadconnected", function(e) {
+  var gp = navigator.getGamepads()[e.gamepad.index];
+  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+   e.gamepad.index, e.gamepad.id,
+   e.gamepad.buttons.length, e.gamepad.axes.length);
+   // gamepadInfo.innerHTML = "Gamepad connected at index " + gp.index + ": " + gp.id + ". It has " + gp.buttons.length + " buttons and " + gp.axes.length + " axes.";
+});
+
+window.addEventListener("gamepaddisconnected", function(e) {
+  gamepadInfo.innerHTML = "Waiting for gamepad.";
+
+  cancelRequestAnimationFrame(start);
+});
+
+function buttonPressed(b) {
+  if (typeof(b) == "object") {
+    return b.pressed;
+  }
+  return b == 1.0;
+}
 
 var canvas = document.getElementById("canvas"),
     ctx = canvas.getContext("2d"),
@@ -86,15 +106,18 @@ boxes.push({//All platform colors
     y: 350,
     width: 10,
     height: 50,
-    color: 'black'
+
 });
 
 canvas.width = width;
 canvas.height = height;
 
 function update() {
+
+  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+  var gp = gamepads[0];
     // check keys
-    if (keys[38] || keys[32] || keys[87]) {
+    if (gp != null && buttonPressed(gp.buttons[1])) {
         // up arrow or space
         if (!player.jumping && player.grounded) {
             player.jumping = true;
@@ -102,13 +125,13 @@ function update() {
             player.velY = -player.speed * 2.5;//how high to jump
         }
     }
-    if (keys[39] || keys[68]) {
+    if (gp != null && buttonPressed(gp.buttons[0])) {
         // right arrow
         if (player.velX < player.speed) {
             player.velX++;
         }
     }
-    if (keys[37] || keys[65]) {
+    if (gp != null && buttonPressed(gp.buttons[2])) {
         // left arrow
         if (player.velX > -player.speed) {
             player.velX--;
@@ -120,12 +143,19 @@ function update() {
     player.velX *= friction;
     player.velY += gravity;
 
-    ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, width, height);
     ctx.beginPath();
 
     player.grounded = false;
+    ctx.fillStyle = "white";
+        drawlightsource();
+
+
+            ctx.beginPath();
+            ctx.fillStyle = "Black";
+
     for (var i = 0; i < boxes.length; i++) {//print boxes
-        ctx.fillStyle = boxes[i].color;
+        //ctx.fillStyle = boxes[i].color;
         ctx.rect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
 
         var dir = colCheck(player, boxes[i]);
@@ -141,6 +171,8 @@ function update() {
         }
 
     }
+
+
 
     if(player.grounded){
          player.velY = 0;
@@ -190,16 +222,16 @@ function colCheck(shapeA, shapeB) {
     }
     return colDir;
 }
+function drawlightsource(){
+  if (meter == null) return;
+  let x = player.x;
+  let y = player.y;
 
-document.body.addEventListener("keydown", function (e) {
-    keys[e.keyCode] = true;
-});
+  let lightball = new Point(x+player.width/2,y+player.height/2,meter.volume * 800,"white");
+  lightball.draw(ctx);
 
-document.body.addEventListener("keyup", function (e) {
-    keys[e.keyCode] = false;
-});
-
-
+  return lightball;
+}
 window.addEventListener("load", function () {
     update();
 });
