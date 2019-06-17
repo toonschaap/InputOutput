@@ -68,9 +68,9 @@ function drawLoop( time ) {
 
     // check if we're currently clipping
     if (meter.checkClipping())
-        canvasContext.fillStyle = "red";
+        canvasContext.fillStyle = "black";
     else
-        canvasContext.fillStyle = "white";
+        canvasContext.fillStyle = "black";
 
     // draw a bar based on the current volume
     canvasContext.fillRect(0, 0, meter.volume*WIDTH*1.4, HEIGHT);

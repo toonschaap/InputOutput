@@ -125,31 +125,28 @@ function update() {
             player.velY = -player.speed * 2.5;//how high to jump
         }
     }
-    if (gp != null && buttonPressed(gp.buttons[0])) {
+    if (gp != null && buttonPressed(gp.buttons[2])) {
         // right arrow
         if (player.velX < player.speed) {
             player.velX++;
         }
     }
-    if (gp != null && buttonPressed(gp.buttons[2])) {
+    if (gp != null && buttonPressed(gp.buttons[0])) {
         // left arrow
         if (player.velX > -player.speed) {
             player.velX--;
         }
     }
 
-
-
     player.velX *= friction;
     player.velY += gravity;
 
       ctx.clearRect(0, 0, width, height);
-    ctx.beginPath();
+      ctx.beginPath();
 
     player.grounded = false;
     ctx.fillStyle = "white";
         drawlightsource();
-
 
             ctx.beginPath();
             ctx.fillStyle = "Black";
